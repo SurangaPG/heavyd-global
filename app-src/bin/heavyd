@@ -1,0 +1,101 @@
+#!/usr/bin/env php
+
+<?php
+
+/*
+ * Their are 2 situations
+ *
+ * 1) This is already a valid workflow project, we'll use the workflow application
+ * bundled in the project. This will make the full config of the project with
+ * all it's functions available.
+ *
+ * 2) This is a new project, we'll use the application bundled in
+ * the cli. This is a skeleton application that only includes some global helper
+ * functions.
+ */
+
+// Check or a .workflow.yml file exists in this or any of the parent directories.
+// This ensures we don't accidentally run the global cli in child directories of
+// a valid project.
+$basePath = getcwd();
+
+global $argv;
+
+$maxDepth = 100;
+$curDepth = 0;
+$useGlobal = false;
+
+// The self update should always be run from the global scope since it requires
+// classes to be autoloaded from the phar. It will fail if run from a project
+// application.
+if(in_array('self-update', $argv)) {
+  $useGlobal = TRUE;
+}
+
+while (!file_exists($basePath . '/.heavyd.yml') && !$useGlobal) {
+  $basePath = realpath($basePath . '/..');
+  $curDepth++;
+  if($curDepth > $maxDepth) {
+    $useGlobal = true;
+    break;
+  }
+}
+
+// If a valid workflow marker (.heavyd.yml) was found we'll do some extra
+// checks just to be safe. E.g ensure the composer.json/autoload and
+// vendor/bin/workflow exists.
+if(!$useGlobal) {
+  if(!file_exists($basePath . '/.heavyd/composer.json')) {
+    echo "No valid composer.json could be found for this project." . PHP_EOL;
+    $useGlobal = true;
+  }
+
+  if(!file_exists($basePath . '/.heavyd/composer.lock')) {
+    echo "Heavyd project not properly installed." . PHP_EOL;
+    $useGlobal = true;
+  }
+
+  if(!file_exists($basePath . '/.heavyd/vendor/bin/heavyd')) {
+    echo "Heavyd binary missing installed for this package. Defaulting to global. " . PHP_EOL;
+    $useGlobal = true;
+  }
+}
+
+if($useGlobal) {
+  // Include the composer autoloader from the phar
+  require __DIR__ . '/../vendor/autoload.php';
+
+  $application = new surangapg\HeavydGlobal\HeavydGlobalApplication();
+  $application->run();
+}
+
+// If the project has it's own internal workflow running we'll pass on the arguments
+// to it's own application instead of using the global scope.
+if(!$useGlobal) {
+
+  // Include the workflow autoloader from the project.
+  require $basePath . '/.heavyd/vendor/autoload.php';
+
+  try {
+
+
+    $application = surangapg\Heavyd\HeavydApplication::create();
+    /*
+    // Add some commands from the global scope to the project
+    require __DIR__ . '/../src/Glob/Command/GlobalCommandBase.php';
+
+    // @TODO Automate this once there are more commands in this scope
+    require __DIR__ . '/../src/Glob/Command/SettingsCommand.php';
+    $application->add(new workflow\Workflow\Glob\Command\SettingsCommand());
+   */
+
+  }
+  catch(\Exception $e) {
+    echo $e->getMessage() . "\n";
+    exit;
+  }
+
+  $application->run();
+}
+
+

@@ -1,0 +1,28 @@
+{
+    "name": "workflow/workflow-cli",
+    "description": "Contains a helper to handle global workflow commands.",
+    "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "surangapg\\HeavydGlobal\\": "src"
+        }
+    },
+    "require": {
+        "padraic/phar-updater": "^1.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "tlr/html-table-builder": "^1.1",
+        "symfony/console": "^3.4",
+        "symfony/yaml": "^3.4",
+        "symfony/filesystem": "^3.4"
+    },
+    "config": {
+      "platform": {
+        "php": "7.0.22"
+      }
+    },
+    "bin": [
+        "bin/heavyd"
+    ]
+}

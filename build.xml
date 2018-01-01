@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<project name="Seed tasks" default="help" description="">
+
+    <target name="help">
+        <echo message="See https://ausybenelux.atlassian.net/wiki/spaces/devteam/pages/234651860/Global+Cli for more info" />
+    </target>
+
+    <target name="build" description="Builds the phar locally.">
+        <echo message="Building phar" />
+        <exec passthru="true"
+              command="${project.basedir}/build-tools/box.phar build"
+              dir="${project.basedir}/app-src"
+              checkreturn="true" />
+    </target>
+
+    <target name="release" description="Tags and releases the phar.">
+        <fail unless="version.tag" />
+        <fail unless="version.message" />
+        <!-- This item needs a tag, but it also needs to push the phar with said tag, hence the odd implementation -->
+        <exec passthru="true" dir="${project.basedir}" command="git fetch" checkreturn="true" />
+        <exec passthru="true" dir="${project.basedir}" command="git tag ${version.tag}" checkreturn="true" />
+        <phingcall target="build" />
+
+        <!-- Now commit the new version and move the tag-->
+        <echo message="Committing phar with the correct version." />
+        <exec passthru="true" dir="${project.basedir}" command="git add --all" />
+        <exec passthru="true" dir="${project.basedir}" command="git commit -m'${version.tag}: ${version.message}'" checkreturn="true" />
+        <echo message="Correcting tag phar" />
+        <exec passthru="true" dir="${project.basedir}" command="git tag -d ${version.tag}" checkreturn="true" />
+        <exec passthru="true" dir="${project.basedir}" command="git tag -a ${version.tag} -m 'version.message'" checkreturn="true"/>
+        <echo message="Pushing phar" />
+
+        <exec passthru="true" dir="${project.basedir}" command="git push" />
+        <exec passthru="true" dir="${project.basedir}" command="git push origin ${version.tag}" />
+    </target>
+
+</project>

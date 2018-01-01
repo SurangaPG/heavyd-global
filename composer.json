@@ -1,0 +1,13 @@
+{
+    "name": "workflow/workflow-cli",
+    "description": "Packager and source code for the workflow cli",
+    "authors": [
+        {
+            "name": "Suranga Panagamuwa Gamage",
+            "email": "suranga.gamage@one-agency.be"
+        }
+    ],
+    "require": {
+        "phing/phing": "^2.16"
+    }
+}
