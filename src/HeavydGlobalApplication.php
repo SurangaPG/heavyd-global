@@ -17,7 +17,6 @@ class HeavydGlobalApplication extends Application {
     parent::__construct('heavyd-global', $this::VERSION);
 
     $this->setBasePath();
-
   }
 
   public function setBasePath() {
