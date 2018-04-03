@@ -1,6 +1,6 @@
 {
-    "name": "workflow/workflow-cli",
-    "description": "Contains a helper to handle global workflow commands.",
+    "name": "surangapg/heavyd-global",
+    "description": "Contains a helper to handle global heavyd commands.",
     "type": "project",
     "minimum-stability": "dev",
     "prefer-stable": true,
