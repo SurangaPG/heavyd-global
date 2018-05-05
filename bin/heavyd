@@ -23,7 +23,7 @@ global $argv;
 
 $maxDepth = 100;
 $curDepth = 0;
-$useGlobal = false;
+$useGlobal = FALSE;
 
 // The self update should always be run from the global scope since it requires
 // classes to be autoloaded from the phar. It will fail if run from a project
@@ -36,7 +36,7 @@ while (!file_exists($basePath . '/.heavyd.yml') && !$useGlobal) {
   $basePath = realpath($basePath . '/..');
   $curDepth++;
   if($curDepth > $maxDepth) {
-    $useGlobal = true;
+    $useGlobal = TRUE;
     break;
   }
 }
@@ -47,25 +47,29 @@ while (!file_exists($basePath . '/.heavyd.yml') && !$useGlobal) {
 if(!$useGlobal) {
   if(!file_exists($basePath . '/.heavyd/composer.json')) {
     echo "No valid composer.json could be found for this project." . PHP_EOL;
-    $useGlobal = true;
+    $useGlobal = TRUE;
   }
 
   if(!file_exists($basePath . '/.heavyd/composer.lock')) {
     echo "Heavyd project not properly installed." . PHP_EOL;
-    $useGlobal = true;
+    $useGlobal = TRUE;
   }
 
   if(!file_exists($basePath . '/.heavyd/vendor/bin/heavyd')) {
     echo "Heavyd binary missing installed for this package. Defaulting to global. " . PHP_EOL;
-    $useGlobal = true;
+    $useGlobal = TRUE;
   }
 }
 
+// If this is the global application we'll treat it as such and only bootstrap
+// that.
 if($useGlobal) {
   // Include the composer autoloader from the phar
   require __DIR__ . '/../vendor/autoload.php';
 
-  $application = new surangapg\HeavydGlobal\HeavydGlobalApplication();
+  $scopes = \surangapg\HeavydComponents\Scope\Scope::detectActiveScopes();
+  $application = \surangapg\HeavydGlobal\HeavydGlobalApplication::create($scopes);
+
   $application->run();
 }
 
@@ -77,18 +81,8 @@ if(!$useGlobal) {
   require $basePath . '/.heavyd/vendor/autoload.php';
 
   try {
-
-
-    $application = surangapg\Heavyd\HeavydApplication::create();
-    /*
-    // Add some commands from the global scope to the project
-    require __DIR__ . '/../src/Glob/Command/GlobalCommandBase.php';
-
-    // @TODO Automate this once there are more commands in this scope
-    require __DIR__ . '/../src/Glob/Command/SettingsCommand.php';
-    $application->add(new workflow\Workflow\Glob\Command\SettingsCommand());
-   */
-
+    $scopes = \surangapg\HeavydComponents\Scope\Scope::detectActiveScopes();
+    $application = surangapg\Heavyd\HeavydApplication::create($scopes);
   }
   catch(\Exception $e) {
     echo $e->getMessage() . "\n";
@@ -97,5 +91,3 @@ if(!$useGlobal) {
 
   $application->run();
 }
-
-

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ef98cb879d2e6c25f8497f5478ca130",
+    "content-hash": "25699f901822e4a0402ba03b1f318094",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -297,6 +297,54 @@
             "time": "2017-07-12T22:42:45+00:00"
         },
         {
+            "name": "paragonie/random_compat",
+            "version": "v2.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/random.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "pseudorandom",
+                "random"
+            ],
+            "time": "2018-04-04T21:24:14+00:00"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -392,6 +440,40 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "surangapg/heavyd-components",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SurangaPG/heavyd-components.git",
+                "reference": "64b514eeb63f9b27dcd03d25468250ef34068bc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SurangaPG/heavyd-components/zipball/64b514eeb63f9b27dcd03d25468250ef34068bc8",
+                "reference": "64b514eeb63f9b27dcd03d25468250ef34068bc8",
+                "shasum": ""
+            },
+            "require": {
+                "paragonie/random_compat": "^2.0",
+                "symfony/console": "^2.8 || ^3",
+                "symfony/filesystem": "^2.8 || ^3",
+                "symfony/yaml": "^2.8 || ^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "surangapg\\HeavydComponents\\Test\\": "tests/Test",
+                    "surangapg\\HeavydComponents\\": "src"
+                }
+            },
+            "description": "Contains a number of shared components useful for both the general heavyd package as the cli etc. These can be used stand alone.",
+            "support": {
+                "source": "https://github.com/SurangaPG/heavyd-components/tree/master",
+                "issues": "https://github.com/SurangaPG/heavyd-components/issues"
+            },
+            "time": "2018-03-31T22:09:23+00:00"
         },
         {
             "name": "symfony/console",
@@ -729,7 +811,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "surangapg/heavyd-components": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
