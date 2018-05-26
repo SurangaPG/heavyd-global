@@ -9,13 +9,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class GetCommand extends GlobalCommandBase {
+class PullCommand extends GlobalCommandBase {
 
   /**
    * @inheritdoc
    */
   protected function configure() {
-    $this->setName('data:get')
+    $this->setName('data:pull')
       ->setDescription('get the global data set from a git remote.');
   }
 
@@ -23,7 +23,7 @@ class GetCommand extends GlobalCommandBase {
    * @inheritdoc
    */
   public function execute(InputInterface $input, OutputInterface $output) {
-    $this->getIo()->title('Pulling in data from remote.');
+    $this->getIo()->title('Pulling');
 
     $properties = $this->getProperties()->get('global');
 
@@ -54,6 +54,25 @@ class GetCommand extends GlobalCommandBase {
       else {
         $this->getIo()->writeln('<fg=yellow>Pulling ' . $name . '</>');
         passthru(sprintf('cd %s && git pull', $globalFolder . '/' . $name));
+      }
+
+      $this->getIo()->writeln('<fg=yellow>Installing dependencies ' . $name . '</>');
+      passthru(sprintf('cd %s && composer install --no-progress --no-suggest', $globalFolder . '/' . $name));
+
+      $homeDrushDir = '';
+      exec('cd && pwd', $homeDrushDir);
+      $homeDrushDir = $homeDrushDir[0];
+      $homeDrushDir .= '/.drush';
+
+      if (!file_exists($homeDrushDir)) {
+        mkdir($homeDrushDir);
+        mkdir($homeDrushDir . '/site-aliases');
+      }
+
+      if (!file_exists($homeDrushDir . '/site-aliases/' . $name)) {
+        $this->getIo()->writeln('<fg=yellow>Symlinking folders ' . $name . '</>');
+        passthru(sprintf('ln -s %s %s', $globalFolder . '/' . $name . '/drush-aliases', $homeDrushDir . '/site-aliases/' . $name));
+
       }
     }
   }

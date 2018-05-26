@@ -6,8 +6,9 @@ use surangapg\HeavydComponents\Application\ApplicationInterface;
 use surangapg\HeavydComponents\Properties\Properties;
 use surangapg\HeavydComponents\Properties\PropertiesInterface;
 use surangapg\HeavydComponents\Scope\ScopeInterface;
+use surangapg\HeavydGlobal\Command\Data\GenerateAliasesCommand as DataGenerateAliasesCommand;
 use surangapg\HeavydGlobal\Command\Properties\SetCommand as PropertiesSetCommand;
-use surangapg\HeavydGlobal\Command\Data\GetCommand as DataGetCommand;
+use surangapg\HeavydGlobal\Command\Data\PullCommand as DataPullCommand;
 use surangapg\HeavydGlobal\Command\UpdateCommand;
 use Symfony\Component\Console\Application;
 
@@ -68,7 +69,8 @@ class HeavydGlobalApplication extends Application implements ApplicationInterfac
 
     $this->add(new UpdateCommand());
     $this->add(new PropertiesSetCommand());
-    $this->add(new DataGetCommand());
+    $this->add(new DataPullCommand());
+    $this->add(new DataGenerateAliasesCommand());
   }
 
   /**

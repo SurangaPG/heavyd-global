@@ -9,7 +9,6 @@
 namespace surangapg\HeavydGlobal\Command\Base;
 
 use surangapg\HeavydComponents\Application\ApplicationInterface;
-use surangapg\HeavydGlobal\HeavydGlobalApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
