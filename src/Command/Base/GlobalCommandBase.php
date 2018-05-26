@@ -8,6 +8,8 @@
 
 namespace surangapg\HeavydGlobal\Command\Base;
 
+use surangapg\HeavydComponents\Application\ApplicationInterface;
+use surangapg\HeavydGlobal\HeavydGlobalApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,4 +57,17 @@ abstract class GlobalCommandBase extends Command {
     $this->Io = $Io;
   }
 
+  /**
+   * @return ApplicationInterface
+   */
+  public function getApplication() {
+    return parent::getApplication();
+  }
+
+  /**
+   * @return \surangapg\HeavydComponents\Properties\PropertiesInterface
+   */
+  public function getProperties() {
+    return $this->getApplication()->getProperties();
+  }
 }

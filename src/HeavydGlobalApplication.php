@@ -2,13 +2,16 @@
 
 namespace surangapg\HeavydGlobal;
 
+use surangapg\HeavydComponents\Application\ApplicationInterface;
 use surangapg\HeavydComponents\Properties\Properties;
 use surangapg\HeavydComponents\Properties\PropertiesInterface;
 use surangapg\HeavydComponents\Scope\ScopeInterface;
+use surangapg\HeavydGlobal\Command\Properties\SetCommand as PropertiesSetCommand;
+use surangapg\HeavydGlobal\Command\Data\GetCommand as DataGetCommand;
 use surangapg\HeavydGlobal\Command\UpdateCommand;
 use Symfony\Component\Console\Application;
 
-class HeavydGlobalApplication extends Application {
+class HeavydGlobalApplication extends Application implements ApplicationInterface {
 
   /**
    * Version for the item.
@@ -64,6 +67,8 @@ class HeavydGlobalApplication extends Application {
     $this->setProperties($properties);
 
     $this->add(new UpdateCommand());
+    $this->add(new PropertiesSetCommand());
+    $this->add(new DataGetCommand());
   }
 
   /**
